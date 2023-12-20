@@ -12,7 +12,6 @@ using ZXing.Windows.Compatibility;
 namespace hOTP {
 	public class TOTP {
 		public HashAlgorithm Algorithm { get; }
-		public long TimeRemaining { get; private set; }
 		public Period Period { get; }
 		public Digits Digits { get; }
 		public string? Account { get; }
@@ -21,7 +20,25 @@ namespace hOTP {
 		public string URI { get; }
 		
 		private HMAC? HMAC { get; }
+		private Timer UpdateCodeTimer;
+		private Timer displayCodeTimer;
+		private Code? currentCode;
+		private readonly object codeLock = new object();
 
+
+		private void UpdateCode(object? state) {
+			lock (codeLock) {
+				currentCode = GetCode();
+			}
+		}
+
+		private void DisplayCode(object? state) {
+			lock (codeLock) {
+				if (currentCode == null) return;
+				Console.WriteLine(currentCode);
+				currentCode.TimeRemaining--;
+			}
+		}
 
 		public TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
 			Algorithm = algorithm;
@@ -46,6 +63,14 @@ namespace hOTP {
 
 			URI = $"otpauth://totp/{Uri.EscapeDataString(Issuer ??= "")}:{Uri.EscapeDataString(Account ??= "")}" +
 			      $"?secret={SecretKey}&issuer={Uri.EscapeDataString(Issuer ??= "")}&algorithm={algorithm}&digits={(int)digits}&period={(long)Period}";
+
+			currentCode = GetCode();
+
+			TimeSpan synctoken = TimeSpan.FromMilliseconds(((long)Period * 1000) - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % ((long)Period * 1000));
+
+			UpdateCodeTimer = new Timer(UpdateCode, null, synctoken, TimeSpan.FromSeconds((long)period));
+			displayCodeTimer = new Timer(DisplayCode, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+
 		}
 
 		public Code GetCode() {
@@ -53,8 +78,8 @@ namespace hOTP {
 			long timeStep = (long)Period;
 			long unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 			long timeCounter = unixTimestamp / timeStep;
+			long timeRemaining = (timeStep - unixTimestamp % timeStep) % timeStep;
 
-			TimeRemaining = (timeStep - unixTimestamp % timeStep) % timeStep;
 
 			byte[] counterBytes = BitConverter.GetBytes(timeCounter);
 			if (BitConverter.IsLittleEndian)
@@ -72,7 +97,7 @@ namespace hOTP {
 			int otp = binary % (int)Math.Pow(10, (int)Digits);
 
 
-			return new Code(otp.ToString($"D{(int)Digits}"), TimeRemaining == 0 ? timeStep : TimeRemaining); 
+			return new Code(otp.ToString($"D{(int)Digits}"), timeRemaining == 0 ? timeStep : timeRemaining); 
 		}
 
 		public void GenerateQrCode() {
@@ -103,8 +128,9 @@ namespace hOTP {
 				if (issuer == null) {
 					issuer = account.Split(':')[0];
 					account = account.Split(':')[1];
+				} else if (account.Contains(':')) {
+					account = account.Split(':')[1];
 				}
-				
 
 				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey, (Period)Enum.Parse(typeof(Period), period), (Digits)Enum.Parse(typeof(Digits), digits), issuer, account);
 			}

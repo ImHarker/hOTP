@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace hOTP {
 	public class Code {
 		public string Value { get; }
-		public long TimeRemaining { get; }
+		public long TimeRemaining { get; set; }
+
 		public Code(string value, long timeRemaining) {
 			Value = value;
 			TimeRemaining = timeRemaining;

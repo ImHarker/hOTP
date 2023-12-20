@@ -12,11 +12,8 @@ namespace hOTP {
 			TOTP? totp = TOTP.DecodeQrCode("qrcode.png");
 			if (totp == null) return;
 
+			Thread.Sleep(1000 * 60);
 
-			for (int i = 0; i < 30; i++) {
-				Console.WriteLine($"{totp.GetCode()}");
-				Thread.Sleep(1000);
-			}
 		}
 	}
 }
