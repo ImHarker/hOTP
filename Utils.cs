@@ -13,6 +13,15 @@ namespace hOTP {
 		SHA512
 	}
 
+	public enum Digits {
+		Six = 6,
+		Eight = 8
+	}
+	public enum Period {
+		ThirtySeconds = 30,
+		SixtySeconds = 60
+	}
+
 	public static class Utils {
 
 		public static byte[] GenerateRandomBytes(int length) {

@@ -13,8 +13,8 @@ namespace hOTP {
 	public class TOTP {
 		public HashAlgorithm Algorithm { get; }
 		public long TimeRemaining { get; private set; }
-		public long Period { get; }
-		public int NumberOfDigits { get; }
+		public Period Period { get; }
+		public Digits Digits { get; }
 		public string? Account { get; }
 		public string? Issuer { get; }
 		public string? SecretKey { get; }
@@ -23,10 +23,10 @@ namespace hOTP {
 		private HMAC? HMAC { get; }
 
 
-		public TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, long period = 30, int numberOfDigits = 6, string? issuer = null, string? account = null) {
+		public TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
 			Algorithm = algorithm;
 			Period = period;
-			NumberOfDigits = numberOfDigits;
+			Digits = digits;
 			Account = account;
 			Issuer = issuer;
 			SecretKey = secretKey;
@@ -45,12 +45,12 @@ namespace hOTP {
 			}
 
 			URI = $"otpauth://totp/{Uri.EscapeDataString(Issuer ??= "")}:{Uri.EscapeDataString(Account ??= "")}" +
-			      $"?secret={SecretKey}&issuer={Uri.EscapeDataString(Issuer ??= "")}&algorithm={algorithm}&digits={numberOfDigits}&period={Period}";
+			      $"?secret={SecretKey}&issuer={Uri.EscapeDataString(Issuer ??= "")}&algorithm={algorithm}&digits={(int)digits}&period={(long)Period}";
 		}
 
 		public Code GetCode() {
 			if (HMAC == null) throw new NullReferenceException("HMAC is null");
-			long timeStep = Period;
+			long timeStep = (long)Period;
 			long unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 			long timeCounter = unixTimestamp / timeStep;
 
@@ -69,10 +69,10 @@ namespace hOTP {
 			             (hash[offset + 2] & 0xFF) << 8 |
 			             (hash[offset + 3] & 0xFF);
 
-			int otp = binary % (int)Math.Pow(10, NumberOfDigits);
+			int otp = binary % (int)Math.Pow(10, (int)Digits);
 
 
-			return new Code(otp.ToString($"D{NumberOfDigits}"), TimeRemaining == 0 ? timeStep : TimeRemaining); 
+			return new Code(otp.ToString($"D{(int)Digits}"), TimeRemaining == 0 ? timeStep : TimeRemaining); 
 		}
 
 		public void GenerateQrCode() {
@@ -82,7 +82,7 @@ namespace hOTP {
 		public static TOTP? DecodeQrCode(string path) {
 			try {
 				//otpauth://totp/{account}?secret={secretKey}&issuer={issuer}&algorithm={algorithm}&digits={ndigits}&period={period}
-				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={numberOfDigits}&period={Period}
+				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={digits}&period={Period}
 				var uristring = Utils.DecodeQrCode(path).Text;
 				var uri = new Uri(uristring);
 				var query = uri.Query;
@@ -106,7 +106,7 @@ namespace hOTP {
 				}
 				
 
-				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey, long.Parse(period), int.Parse(digits), issuer, account);
+				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey, (Period)Enum.Parse(typeof(Period), period), (Digits)Enum.Parse(typeof(Digits), digits), issuer, account);
 			}
 			catch (ReaderException e) {
 				Console.WriteLine(e.Message);
