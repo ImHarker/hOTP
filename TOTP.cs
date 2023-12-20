@@ -81,21 +81,37 @@ namespace hOTP {
 
 		public static TOTP? DecodeQrCode(string path) {
 			try {
-				var uri = Utils.DecodeQrCode(path).Text;
+				//otpauth://totp/{account}?secret={secretKey}&issuer={issuer}&algorithm={algorithm}&digits={ndigits}&period={period}
+				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={numberOfDigits}&period={Period}
+				var uristring = Utils.DecodeQrCode(path).Text;
+				var uri = new Uri(uristring);
+				var query = uri.Query;
 
-				uri = uri.Replace("otpauth://totp/", "");
+				var queryParams = System.Web.HttpUtility.ParseQueryString(query);
 
-				var issuer = uri.Split(":")[0];
-				var account = uri.Split(":")[1].Split("?")[0];
+				var account = uristring.Replace("otpauth://totp/", "").Split("?")[0];
+				var secretKey = queryParams.Get("secret");
+				var issuer = queryParams.Get("issuer");
+				var algorithm = queryParams.Get("algorithm");
+				var digits = queryParams.Get("digits");
+				var period = queryParams.Get("period");
 
-				var secretKey = uri.Split("secret=")[1].Split("&")[0];
-				var algorithm = uri.Split("algorithm=")[1].Split("&")[0];
-				var digits = uri.Split("digits=")[1].Split("&")[0];
-				var period = uri.Split("period=")[1].Split("&")[0];
+				algorithm ??= "SHA1";
+				digits ??= "6";
+				period ??= "30";
+
+				if (issuer == null) {
+					issuer = account.Split(':')[0];
+					account = account.Split(':')[1];
+				}
+				
 
 				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey, long.Parse(period), int.Parse(digits), issuer, account);
 			}
 			catch (ReaderException e) {
+				Console.WriteLine(e.Message);
+				return null;
+			} catch (Exception e) {
 				Console.WriteLine(e.Message);
 				return null;
 			}
