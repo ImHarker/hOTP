@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Cryptography;
 using ZXing;
-using ZXing.Common;
-using ZXing.Windows.Compatibility;
+using HashAlgorithm = hOTPcommon.HashAlgorithm;
 
-namespace hOTP {
+namespace hOTPcommon {
 	public class TOTP {
 		public HashAlgorithm Algorithm { get; }
 		public Period Period { get; }
@@ -18,12 +11,12 @@ namespace hOTP {
 		public string? Issuer { get; }
 		public string? SecretKey { get; }
 		public string URI { get; }
-		
+
 		private HMAC? HMAC { get; }
 		private Timer UpdateCodeTimer;
 		private Timer displayCodeTimer;
-		private Code? currentCode;
-		private readonly object codeLock = new object();
+		protected Code? currentCode;
+		protected readonly object codeLock = new object();
 
 
 		private void UpdateCode(object? state) {
@@ -32,10 +25,9 @@ namespace hOTP {
 			}
 		}
 
-		private void DisplayCode(object? state) {
+		protected virtual void DisplayCode(object? state) {
 			lock (codeLock) {
 				if (currentCode == null) return;
-				Console.WriteLine(currentCode);
 				currentCode.TimeRemaining--;
 			}
 		}

@@ -5,7 +5,7 @@ using ZXing;
 using ZXing.Common;
 using ZXing.Windows.Compatibility;
 
-namespace hOTP {
+namespace hOTPcommon {
 
 	public enum HashAlgorithm {
 		SHA1,

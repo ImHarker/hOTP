@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\edit.png" />
+    <None Remove="Assets\qr.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PresentationFramework.Aero2" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\hOTPcommon\hOTPcommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\edit.png" />
+    <Resource Include="Assets\qr.png" />
+  </ItemGroup>
+
+</Project>
