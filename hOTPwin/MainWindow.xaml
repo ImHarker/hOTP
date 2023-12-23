@@ -1,81 +1,88 @@
-﻿<Window x:Class="hOTPwin.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:hOTPwin"
-        mc:Ignorable="d"
-        Style="{StaticResource CustomWindowStyle}"
-        Title="hOTP" Height="620" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-
+﻿    <Window x:Class="hOTPwin.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:hOTPwin"
+            mc:Ignorable="d"
+            Style="{StaticResource CustomWindowStyle}"
+            Title="hOTP" Height="625" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!-- Menu Row -->
-            <RowDefinition Height="*" />
-            <!-- ListBox Row -->
-        </Grid.RowDefinitions>
-        <Menu VerticalAlignment="Top" HorizontalAlignment="Right">
-            <MenuItem>
-                <MenuItem.HeaderTemplate>
-                    <DataTemplate>
-                        <Grid Width="30" Height="30">
-                            <Image Source="/hOTPwin;component/Assets/edit.png" Width="25" Height="25" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </MenuItem.HeaderTemplate>
-            </MenuItem>
-
-            <MenuItem>
-                <MenuItem.HeaderTemplate>
-                    <DataTemplate>
-                        <Grid Width="30" Height="30">
-                            <Image Source="/hOTPwin;component/Assets/qr.png" Width="25" Height="25" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </MenuItem.HeaderTemplate>
-            </MenuItem>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Menu VerticalAlignment="Top" HorizontalAlignment="Right">
+                <MenuItem>
+                    <MenuItem.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Width="30" Height="30">
+                                <Image Source="/hOTPwin;component/Assets/add.png" Width="25" Height="25" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </MenuItem.HeaderTemplate>
+                </MenuItem>
+                <MenuItem Click="DeleteMode_OnClick">
+                    <MenuItem.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Width="30" Height="30">
+                                <Image Source="/hOTPwin;component/Assets/trash.png" Width="25" Height="25" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </MenuItem.HeaderTemplate>
+                </MenuItem>
         </Menu>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding TOTPList}" HorizontalContentAlignment="Stretch">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" Background="#343434" BorderThickness="2" Margin="5" Padding="10">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
+        <ListBox x:Name="listBox" Grid.Row="1" ItemsSource="{Binding TOTPList}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="2" Margin="5" Padding="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.ColumnSpan="2" Text="{Binding Card.Issuer}" FontSize="16" FontWeight="Bold" />
-                                
-                            <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,30,0">
+
+                                <TextBlock Grid.ColumnSpan="2" Text="{Binding Card.Issuer}" FontSize="16" FontWeight="Bold" />
+                                    
+                                <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="10,0,30,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                    <TextBlock HorizontalAlignment="Left" FontSize="25"  VerticalAlignment="Center" Text="{Binding Card.Code}" />
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" FontSize="25" VerticalAlignment="Center" Text="{Binding Card.TimeRemaining, StringFormat={}{0:D2}s}" />
+                                    </Grid>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14" FontWeight="Thin" Text="{Binding Card.Account}" />
+                                <Grid Grid.Row="0" Grid.Column="1" RowSpan="2" ColumnSpan="2">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-
-                                <TextBlock HorizontalAlignment="Left" FontSize="25"  VerticalAlignment="Center" Text="{Binding Card.Code}" />
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" FontSize="25" VerticalAlignment="Center" Text="{Binding Card.TimeRemaining, StringFormat={}{0:D2}s}" />
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                <Button Grid.Column="2" Width="Auto" Height="Auto" Padding="5" Content="Delete" Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=(local:DeleteModeBehavior.IsDeleteMode), Converter={StaticResource BoolToVisibilityConverter}}" Click="DeleteButtonClick" />
                                 </Grid>
-
-                            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="14" FontWeight="Thin" Text="{Binding Card.Account}" />
                         </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="IsHitTestVisible" Value="False" />
-                </Style>
-            </ListBox.ItemContainerStyle>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
         </ListBox>
 
-    </Grid>
-</Window>
+        </Grid>
+    </Window>

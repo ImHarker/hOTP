@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace hOTPwin {
 	public class Card : INotifyPropertyChanged {
-		public string Issuer { get; set; }
-		public string Account { get; set; }
-		public string Code { get; set; }
+		public string? Issuer { get; set; }
+		public string? Account { get; set; }
+		public string? Code { get; set; }
 		private long timeRemaining;
 		public long TimeRemaining {
 			get { return timeRemaining; }
@@ -20,6 +20,7 @@ namespace hOTPwin {
 				}
 			}
 		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

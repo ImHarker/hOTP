@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\add.png" />
     <None Remove="Assets\edit.png" />
     <None Remove="Assets\qr.png" />
+    <None Remove="Assets\trash.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\edit.png" />
-    <Resource Include="Assets\qr.png" />
+    <Resource Include="Assets\add.png" />
+    <Resource Include="Assets\trash.png" />
   </ItemGroup>
 
 </Project>
