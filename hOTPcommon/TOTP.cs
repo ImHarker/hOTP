@@ -32,7 +32,7 @@ namespace hOTPcommon {
 			}
 		}
 
-		public TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
+		protected TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
 			Algorithm = algorithm;
 			Period = period;
 			Digits = digits;
@@ -65,7 +65,7 @@ namespace hOTPcommon {
 
 		}
 
-		public Code GetCode() {
+		protected Code GetCode() {
 			if (HMAC == null) throw new NullReferenceException("HMAC is null");
 			long timeStep = (long)Period;
 			long unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -92,11 +92,11 @@ namespace hOTPcommon {
 			return new Code(otp.ToString($"D{(int)Digits}"), timeRemaining == 0 ? timeStep : timeRemaining); 
 		}
 
-		public void GenerateQrCode() {
+		protected void GenerateQrCode() {
 			Utils.GenerateQrCode(URI);
 		}
 
-		public static TOTP? DecodeQrCode(string path) {
+		protected static TOTP? DecodeQrCode(string path) {
 			try {
 				//otpauth://totp/{account}?secret={secretKey}&issuer={issuer}&algorithm={algorithm}&digits={ndigits}&period={period}
 				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={digits}&period={Period}

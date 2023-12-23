@@ -25,5 +25,15 @@ namespace hOTPwin {
 				currentCode.TimeRemaining--;
 			}
 		}
+
+		public void GenerateQrCode() {
+			base.GenerateQrCode();
+		}
+
+		public static TOTPwin? DecodeQrCode(string path) {
+			TOTP? totp = TOTP.DecodeQrCode(path);
+			if (totp == null) return null;
+			return new TOTPwin(totp.Algorithm, totp.SecretKey, totp.Period, totp.Digits, totp.Issuer, totp.Account);
+		}
 	}
 }
