@@ -34,8 +34,13 @@ namespace hOTPwin {
 		}
 
 		private void ImportButton_OnClick(object sender, RoutedEventArgs e) {
-			TOTP = new TOTPwin(Algorithm, SecretKey, Period, Digits, Issuer, Account);
-			this.DialogResult = true;
+			try {
+				TOTP = new TOTPwin(Algorithm, SecretKey, Period, Digits, Issuer, Account);
+				this.DialogResult = true;
+			}
+			catch (Exception err) {
+				MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
 		}
 
 		private void CancelButton_OnClick(object sender, RoutedEventArgs e) {

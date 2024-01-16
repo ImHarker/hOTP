@@ -57,6 +57,7 @@ namespace hOTPwin {
 				}
 			}
 		}
+		
 		private void ItemContainerGenerator_StatusChanged(object? sender, EventArgs e) {
 			if (listBox.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated) {
 				foreach (var item in listBox.Items) {
@@ -97,28 +98,6 @@ namespace hOTPwin {
 			if (TOTPList.Count == 0) isDeleteMode = false;
 		}
 
-
-
-
-		
-		private ObservableCollection<TOTPwin> GenerateTestData() {
-			var testData = new ObservableCollection<TOTPwin>();
-			Random random = new Random();
-
-			for (int i = 1; i <= 10; i++) {
-				testData.Add(new TOTPwin(HashAlgorithm.SHA256, null, random.Next(2) == 0 ? Period.Thirty : Period.Sixty, random.Next(2) == 0 ? Digits.Six : Digits.Eight, GenerateRandomString(), GenerateRandomString()) );
-			}
-
-			return testData;
-		}
-
-		private string GenerateRandomString() {
-			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			int length = new Random().Next(5, 17); // Generate a random length between 5 and 16 characters
-			return new string(Enumerable.Repeat(chars, length)
-				.Select(s => s[new Random().Next(s.Length)]).ToArray());
-		}
-
 		private void ImportQRCode_OnClick(object sender, RoutedEventArgs e) {
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Multiselect = false;
@@ -133,7 +112,27 @@ namespace hOTPwin {
 			manualImport.ShowDialog();
 			if (manualImport.TOTP != null) TOTPList.Add(manualImport.TOTP);
 		}
+
+
+		#region TestData
+		private ObservableCollection<TOTPwin> GenerateTestData() {
+			var testData = new ObservableCollection<TOTPwin>();
+			Random random = new Random();
+
+			for (int i = 1; i <= 10; i++) {
+				testData.Add(new TOTPwin(HashAlgorithm.SHA256, null, random.Next(2) == 0 ? Period.Thirty : Period.Sixty, random.Next(2) == 0 ? Digits.Six : Digits.Eight, GenerateRandomString(), GenerateRandomString()));
+			}
+
+			return testData;
+		}
+
+		private string GenerateRandomString() {
+			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			int length = new Random().Next(5, 17); // Generate a random length between 5 and 16 characters
+			return new string(Enumerable.Repeat(chars, length)
+				.Select(s => s[new Random().Next(s.Length)]).ToArray());
+		}
+		#endregion
+
 	}
-
-
 }
