@@ -32,7 +32,7 @@ namespace hOTPcommon {
 			}
 		}
 
-		protected TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
+		protected TOTP(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null, Period period = Period.Thirty, Digits digits = Digits.Six, string? issuer = null, string? account = null) {
 			Algorithm = algorithm;
 			Period = period;
 			Digits = digits;

@@ -24,6 +24,8 @@
                             </Grid>
                         </DataTemplate>
                     </MenuItem.HeaderTemplate>
+                    <MenuItem Header="Import QR Code" Click="ImportQRCode_OnClick"></MenuItem>
+                    <MenuItem Header="Manual Import" Click="ManualImport_OnClick"></MenuItem>
                 </MenuItem>
                 <MenuItem Click="DeleteMode_OnClick">
                     <MenuItem.HeaderTemplate>

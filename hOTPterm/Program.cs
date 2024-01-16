@@ -4,7 +4,7 @@ namespace hOTPterm {
 	public class Program {
 		static void Main(string[] args) {
 			Console.WriteLine("Press any key to close...");
-			//TOTPterm totp = new TOTPterm(HashAlgorithm.SHA1, null, Period.ThirtySeconds, Digits.Six, "Imharker", "root@imharker.dev");
+			//TOTPterm totp = new TOTPterm(HashAlgorithm.SHA1, null, Period.Thirty, Digits.Six, "Imharker", "root@imharker.dev");
 			//totp.GenerateQrCode();
 
 

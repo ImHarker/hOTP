@@ -18,8 +18,8 @@ namespace hOTPcommon {
 		Eight = 8
 	}
 	public enum Period {
-		ThirtySeconds = 30,
-		SixtySeconds = 60
+		Thirty = 30,
+		Sixty = 60
 	}
 
 	public static class Utils {

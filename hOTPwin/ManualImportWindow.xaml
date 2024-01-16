@@ -1,0 +1,54 @@
+﻿<Window x:Class="hOTPwin.ManualImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:hOTPwin"
+        xmlns:hOTPcommon="clr-namespace:hOTPcommon;assembly=hOTPcommon"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d"
+        Style="{StaticResource CustomWindowStyle}"
+        Title="hOTP - Manual Import" Height="625" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="HashAlgorithmValues" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="hOTPcommon:HashAlgorithm"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="DigitsValues" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="hOTPcommon:Digits"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="PeriodValues" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="hOTPcommon:Period"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+    </Window.Resources>
+
+
+    <Grid>
+        <Label FontWeight="Bold" Content="Issuer" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,15,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <TextBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" MaxLength="16" Margin="0,50,0,0" TextWrapping="Wrap" FontSize="16" VerticalAlignment="Top" Width="280" Text="{Binding Issuer}"/>
+        <Label FontWeight="Bold" Content="Account" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,85,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <TextBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" MaxLength="32" Margin="0,120,0,0" TextWrapping="Wrap" FontSize="16" VerticalAlignment="Top" Width="280" Text="{Binding Account}"/>
+        <Label FontWeight="Bold" Content="Secret Key" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,155,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <TextBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" MinLines="2" MaxLength="64" Margin="0,190,0,0" TextWrapping="Wrap" FontSize="16" VerticalAlignment="Top" Width="280" Text="{Binding SecretKey}"/>
+        <Label FontWeight="Bold" Content="Algorithm" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,245,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <ComboBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,280,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280" ItemsSource="{Binding Source={StaticResource HashAlgorithmValues}}" SelectedItem="{Binding Algorithm}"/>
+        <Label FontWeight="Bold" Content="Period" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,315,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <ComboBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280" ItemsSource="{Binding Source={StaticResource PeriodValues}}" SelectedItem="{Binding Period}"/>
+        <Label FontWeight="Bold" Content="Digits" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,385,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280"/>
+        <ComboBox HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,420,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280" ItemsSource="{Binding Source={StaticResource DigitsValues}}" SelectedItem="{Binding Digits}"/>
+        <Button Click="ImportButton_OnClick" Content="Import" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,470,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280" Height="50"/>
+        <Button Click="CancelButton_OnClick" Content="Cancel" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,530,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="0.305,-1.452" Width="280" Height="30"/>
+
+    </Grid>
+    
+</Window>

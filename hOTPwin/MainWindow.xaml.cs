@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using hOTPcommon;
+using Microsoft.Win32;
 
 namespace hOTPwin {
 	/// <summary>
@@ -104,7 +105,7 @@ namespace hOTPwin {
 			Random random = new Random();
 
 			for (int i = 1; i <= 10; i++) {
-				testData.Add(new TOTPwin(HashAlgorithm.SHA256, null, random.Next(2) == 0 ? Period.ThirtySeconds : Period.SixtySeconds, random.Next(2) == 0 ? Digits.Six : Digits.Eight, GenerateRandomString(), GenerateRandomString()) );
+				testData.Add(new TOTPwin(HashAlgorithm.SHA256, null, random.Next(2) == 0 ? Period.Thirty : Period.Sixty, random.Next(2) == 0 ? Digits.Six : Digits.Eight, GenerateRandomString(), GenerateRandomString()) );
 			}
 
 			return testData;
@@ -115,6 +116,21 @@ namespace hOTPwin {
 			int length = new Random().Next(5, 17); // Generate a random length between 5 and 16 characters
 			return new string(Enumerable.Repeat(chars, length)
 				.Select(s => s[new Random().Next(s.Length)]).ToArray());
+		}
+
+		private void ImportQRCode_OnClick(object sender, RoutedEventArgs e) {
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = false;
+			ofd.Filter = "PNG files (*.png)|*.png";
+			if (ofd.ShowDialog() != true) return;
+			TOTPwin? totp = TOTPwin.DecodeQrCode(ofd.FileName);
+			if (totp != null) TOTPList.Add(totp);
+		}
+
+		private void ManualImport_OnClick(object sender, RoutedEventArgs e) {
+			ManualImportWindow manualImport = new ManualImportWindow();
+			manualImport.ShowDialog();
+			if (manualImport.TOTP != null) TOTPList.Add(manualImport.TOTP);
 		}
 	}
 

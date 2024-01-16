@@ -8,7 +8,7 @@ using hOTPcommon;
 namespace hOTPterm {
 	public class TOTPterm : TOTP {
 		public TOTPterm(HashAlgorithm algorithm = HashAlgorithm.SHA256, string? secretKey = null,
-			Period period = Period.ThirtySeconds, Digits digits = Digits.Six, string? issuer = null,
+			Period period = Period.Thirty, Digits digits = Digits.Six, string? issuer = null,
 			string? account = null) : base(algorithm, secretKey, period, digits, issuer, account) {
 		}
 
