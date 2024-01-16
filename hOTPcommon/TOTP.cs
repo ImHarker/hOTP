@@ -100,8 +100,9 @@ namespace hOTPcommon {
 			try {
 				//otpauth://totp/{account}?secret={secretKey}&issuer={issuer}&algorithm={algorithm}&digits={ndigits}&period={period}
 				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={digits}&period={Period}
-				var uristring = Utils.DecodeQrCode(path).Text;
-				var uri = new Uri(uristring);
+				var encodedString = Utils.DecodeQrCode(path).Text;
+				string uristring = Uri.UnescapeDataString(encodedString);
+				var uri = new Uri(uristring, UriKind.RelativeOrAbsolute);
 				var query = uri.Query;
 
 				var queryParams = System.Web.HttpUtility.ParseQueryString(query);
