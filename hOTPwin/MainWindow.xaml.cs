@@ -35,7 +35,8 @@ namespace hOTPwin {
 			DataContext = this;
 
 			// Initialize the list of cards
-			TOTPList = GenerateTestData();
+			TOTPList = new ObservableCollection<TOTPwin>();
+			//TOTPList = GenerateTestData();
 			listBox.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
 		}
 
