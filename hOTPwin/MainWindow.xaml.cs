@@ -120,7 +120,7 @@ namespace hOTPwin {
 			TokenManager.ExportTokens();
 		}
 
-		private void SetPassword() {
+		private bool SetPassword() {
 			bool isPasswordSet = false;
 			while (!isPasswordSet) {
 				PasswordInput passwordInput = new PasswordInput();
@@ -129,13 +129,23 @@ namespace hOTPwin {
 					TokenManager.EncryptionManager.PassToKey(passwordInput.Password!);
 					isPasswordSet = true;
 				}
+				else {
+					var res = MessageBox.Show("Do you want to close the application?", "Warning",
+						MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+					if (res == MessageBoxResult.Yes) {
+						Application.Current.Shutdown();
+						return false;
+					}
+				}
 			}
+
+			return true;
 		}
 
 		private void ImportTokens() {
 			bool flag = false;
 			while (!flag) {
-				SetPassword();
+				if (!SetPassword()) return;
 				try {
 					TokenManager.ImportTokens();
 				} catch (Exception e) {
