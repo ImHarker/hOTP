@@ -101,6 +101,19 @@ namespace hOTPcommon {
 				//otpauth://totp/{account}?secret={secretKey}&issuer={issuer}&algorithm={algorithm}&digits={ndigits}&period={period}
 				//otpauth://totp/{Issuer}:{Account"}?secret={SecretKey}&issuer=Issuer}&algorithm={algorithm}&digits={digits}&period={Period}
 				var encodedString = Utils.DecodeQrCode(path).Text;
+				return TOTP.DecodeURI(encodedString);
+			}
+			catch (ReaderException e) {
+				Console.WriteLine(e.Message);
+				return null;
+			} catch (Exception e) {
+				Console.WriteLine(e.Message);
+				return null;
+			}
+		}
+
+		protected static TOTP? DecodeURI(string encodedString) {
+			try {
 				string uristring = Uri.UnescapeDataString(encodedString);
 				var uri = new Uri(uristring, UriKind.RelativeOrAbsolute);
 				var query = uri.Query;
@@ -121,17 +134,16 @@ namespace hOTPcommon {
 				if (issuer == null) {
 					issuer = account.Split(':')[0];
 					account = account.Split(':')[1];
-				} else if (account.Contains(':')) {
+				}
+				else if (account.Contains(':')) {
 					account = account.Split(':')[1];
 				}
 
-				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey, (Period)Enum.Parse(typeof(Period), period), (Digits)Enum.Parse(typeof(Digits), digits), issuer, account);
+				return new TOTP((HashAlgorithm)Enum.Parse(typeof(HashAlgorithm), algorithm), secretKey,
+					(Period)Enum.Parse(typeof(Period), period), (Digits)Enum.Parse(typeof(Digits), digits), issuer,
+					account);
 			}
-			catch (ReaderException e) {
-				Console.WriteLine(e.Message);
-				return null;
-			} catch (Exception e) {
-				Console.WriteLine(e.Message);
+			catch (Exception) {
 				return null;
 			}
 		}

@@ -35,5 +35,12 @@ namespace hOTPwin {
 			if (totp == null) return null;
 			return new TOTPwin(totp.Algorithm, totp.SecretKey, totp.Period, totp.Digits, totp.Issuer, totp.Account);
 		}
+
+		public static TOTPwin? DecodeURI(string uri) {
+			TOTP? totp = TOTP.DecodeURI(uri);
+			if (totp == null) return null;
+			return new TOTPwin(totp.Algorithm, totp.SecretKey, totp.Period, totp.Digits, totp.Issuer, totp.Account);
+		}
+
 	}
 }

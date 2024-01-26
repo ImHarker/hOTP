@@ -27,17 +27,19 @@ namespace hOTPwin {
 	/// </summary>
 	public partial class MainWindow : Window {
 		public ObservableCollection<TOTPwin> TOTPList { get; set; }
+		public TokenManager TokenManager { get; set; } = new TokenManager();
 		private bool isDeleteMode = false;
 
 		public MainWindow() {
 			InitializeComponent();
 
+
 			DataContext = this;
 
-			// Initialize the list of cards
-			TOTPList = new ObservableCollection<TOTPwin>();
-			//TOTPList = GenerateTestData();
+			TOTPList = TokenManager.Tokens;
 			listBox.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+
+			ImportTokens();
 		}
 
 		private void DeleteMode_OnClick(object? sender, RoutedEventArgs e) {
@@ -93,6 +95,7 @@ namespace hOTPwin {
 
 				if (result == MessageBoxResult.Yes) {
 					TOTPList.Remove(totpItem);
+					TokenManager.ExportTokens();
 				}
 			}
 			if (TOTPList.Count == 0) isDeleteMode = false;
@@ -104,13 +107,43 @@ namespace hOTPwin {
 			ofd.Filter = "PNG files (*.png)|*.png";
 			if (ofd.ShowDialog() != true) return;
 			TOTPwin? totp = TOTPwin.DecodeQrCode(ofd.FileName);
-			if (totp != null) TOTPList.Add(totp);
+			if (totp == null) return;
+			TOTPList.Add(totp);
+			TokenManager.ExportTokens();
 		}
 
 		private void ManualImport_OnClick(object sender, RoutedEventArgs e) {
 			ManualImportWindow manualImport = new ManualImportWindow();
 			manualImport.ShowDialog();
-			if (manualImport.TOTP != null) TOTPList.Add(manualImport.TOTP);
+			if (manualImport.TOTP == null) return;
+			TOTPList.Add(manualImport.TOTP);
+			TokenManager.ExportTokens();
+		}
+
+		private void SetPassword() {
+			bool isPasswordSet = false;
+			while (!isPasswordSet) {
+				PasswordInput passwordInput = new PasswordInput();
+				passwordInput.ShowDialog();
+				if (passwordInput.DialogResult == true) {
+					TokenManager.EncryptionManager.PassToKey(passwordInput.Password!);
+					isPasswordSet = true;
+				}
+			}
+		}
+
+		private void ImportTokens() {
+			bool flag = false;
+			while (!flag) {
+				SetPassword();
+				try {
+					TokenManager.ImportTokens();
+				} catch (Exception e) {
+					MessageBox.Show("Wrong Password!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					continue;
+				}
+				flag = true;
+			}
 		}
 
 
