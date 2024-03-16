@@ -46,6 +46,7 @@ namespace hOTPwin {
 			qrcode.Effect = new BlurEffect { KernelType = KernelType.Gaussian, RenderingBias = RenderingBias.Quality, Radius = 25 };
 			txt.Opacity = 0xff;
 			txt1.Opacity = 0xff;
+			txt2.Opacity = 0xff;
 
 		}
 
@@ -53,6 +54,7 @@ namespace hOTPwin {
 			qrcode.Effect = null;
 			txt.Opacity = 0;
 			txt1.Opacity = 0;
+			txt2.Opacity = 0;
 
 		}
 	}

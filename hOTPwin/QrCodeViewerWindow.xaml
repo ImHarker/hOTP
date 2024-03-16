@@ -23,8 +23,9 @@
         <Border Grid.Row="2" BorderBrush="Black" BorderThickness="4" Margin="15" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid>
                 <Image Name="qrcode" Width="300" Height="300" ClipToBounds="True" MouseLeftButtonDown="QrcodeOnClick" MouseLeave="Qrcode_OnMouseLeave" Cursor="Hand"></Image>
-                <TextBlock Name="txt" FontSize="16" Padding="3" Margin="0,-25,0,0" Text="Click To Focus" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" FontWeight="Bold"></TextBlock>
-                <TextBlock Name="txt1" FontSize="14" Padding="3" Margin="0,25,0,0" Text="Leave Area To Blur" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" FontWeight="Bold"></TextBlock>
+                <TextBlock IsHitTestVisible="False" Name="txt" FontSize="16" Padding="3" Margin="0,-45,0,0" Text="Sensitive Data!" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" FontWeight="Bold"></TextBlock>
+                <TextBlock IsHitTestVisible="False" Name="txt1" FontSize="14" Padding="3" Margin="0,5,0,0" Text="Click To Reveal" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" FontWeight="Bold"></TextBlock>
+                <TextBlock IsHitTestVisible="False" Name="txt2" FontSize="14" Padding="3" Margin="0,45,0,0" Text="Leave Area To Blur" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Yellow" FontWeight="Bold"></TextBlock>
             </Grid>
         </Border>
     </Grid>

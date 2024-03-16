@@ -31,5 +31,11 @@ namespace hOTPwin {
 			Password = pwd.Password;
 			this.DialogResult = true;
 		}
+
+		private void Pwd_OnKeyDown(object sender, KeyEventArgs e) {
+			if (e.Key == Key.Enter) {
+				Submit_OnClick(sender, e);
+			}
+		}
 	}
 }
