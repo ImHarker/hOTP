@@ -9,6 +9,9 @@
             Title="hOTP" Height="625" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <Style TargetType="ListBoxItem">
+            <EventSetter Event="MouseDoubleClick" Handler="OnCardDblClickHandler"/>
+        </Style>
     </Window.Resources>
     <Grid>
             <Grid.RowDefinitions>

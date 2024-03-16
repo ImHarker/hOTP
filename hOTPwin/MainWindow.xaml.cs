@@ -177,5 +177,11 @@ namespace hOTPwin {
 		}
 		#endregion
 
+		private void OnCardDblClickHandler(object sender, MouseButtonEventArgs e) {
+			var totp = ((ListBoxItem)sender).DataContext as TOTPwin;
+			if (totp == null) return;
+			QrCodeViewerWindow qrCodeViewer = new QrCodeViewerWindow(totp);
+			qrCodeViewer.ShowDialog();
+		}
 	}
 }

@@ -30,7 +30,7 @@ namespace hOTPcommon {
 			return bytes;
 		}
 
-		public static void GenerateQrCode(string data) {
+		public static Bitmap GenerateQrCode(string data) {
 			BarcodeWriter barcodeWriter = new BarcodeWriter {
 				Format = BarcodeFormat.QR_CODE,
 				Options = new ZXing.Common.EncodingOptions {
@@ -41,7 +41,7 @@ namespace hOTPcommon {
 
 			Bitmap qrCodeBitmap = barcodeWriter.Write(data);
 
-			qrCodeBitmap.Save("qrcode.png");
+			return qrCodeBitmap;
 		}
 
 		public static Result DecodeQrCode(string path) {

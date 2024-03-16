@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Drawing;
+using System.Security.Cryptography;
 using ZXing;
 using HashAlgorithm = hOTPcommon.HashAlgorithm;
 
@@ -92,8 +93,12 @@ namespace hOTPcommon {
 			return new Code(otp.ToString($"D{(int)Digits}"), timeRemaining == 0 ? timeStep : timeRemaining); 
 		}
 
-		protected void GenerateQrCode() {
-			Utils.GenerateQrCode(URI);
+		protected Bitmap GenerateQrCode() {
+			return Utils.GenerateQrCode(URI);
+		}
+
+		protected void SaveQrCode(string path = "qrcode.png") {
+			GenerateQrCode().Save(path);
 		}
 
 		protected static TOTP? DecodeQrCode(string path) {
